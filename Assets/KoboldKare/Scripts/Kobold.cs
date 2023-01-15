@@ -177,7 +177,7 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
     public Ragdoller ragdoller;
     public void AddStimulation(float s) {
         stimulation += s;
-        if (photonView.IsMine && stimulation >= stimulationMax && TryConsumeEnergy(1)) {
+        if (photonView.IsMine && stimulation >= stimulationMax && TryConsumeEnergy(1f)) {
             photonView.RPC(nameof(Cum), RpcTarget.All);
         }
     }
@@ -195,7 +195,7 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
         stimulation = stimulationMin;
     }
 
-    public bool TryConsumeEnergy(byte amount) {
+    public bool TryConsumeEnergy(float amount) {
         if (energy < amount) {
             return false;
         }
@@ -227,7 +227,7 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
         }
     }
     private Color internalHBCS;
-    private static readonly int BrightnessContrastSaturation = Shader.PropertyToID("_HueBrightnessContrastSaturation");
+    private static readonly int HueBrightnessContrastSaturation = Shader.PropertyToID("_HueBrightnessContrastSaturation");
     private static readonly int Carried = Animator.StringToHash("Carried");
     private static readonly int Quaff = Animator.StringToHash("Quaff");
 
@@ -294,14 +294,14 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
         boobs.SetSize(Mathf.Log(1f + newGenes.breastSize / 20f, 2f), this);
         bellyContainer.maxVolume = newGenes.bellySize;
         metabolizedContents.SetMaxVolume(newGenes.metabolizeCapacitySize);
-        Vector4 hbcs = new Vector4(newGenes.hue/255f, newGenes.brightness/255f, 0.5f, newGenes.saturation/255f);
+        Vector4 hbcs = new Vector4(newGenes.hue/255f, newGenes.brightness/255f, newGenes.contrast/255f, newGenes.saturation/255f);
         // Set color
         foreach (Renderer r in koboldBodyRenderers) {
             if (r == null) {
                 continue;
             }
             foreach (Material m in r.materials) {
-                m.SetVector(BrightnessContrastSaturation, hbcs);
+                m.SetVector(HueBrightnessContrastSaturation, hbcs);
             }
             foreach (var dickSet in activeDicks) {
                 foreach (var rendererMask in dickSet.dick.GetTargetRenderers()) {
@@ -309,7 +309,7 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
                         continue;
                     }
                     foreach (Material m in rendererMask.renderer.materials) {
-                        m.SetVector(BrightnessContrastSaturation, hbcs);
+                        m.SetVector(HueBrightnessContrastSaturation, hbcs);
                     }
                 }
             }

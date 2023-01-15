@@ -24,8 +24,16 @@ public class GenericUsable : MonoBehaviourPun, ISavable, IPunObservable {
     public void RPCUse() {
         Use();
     }
-    public virtual void Save(JSONNode node) { }
-    public virtual void Load(JSONNode node) { }
+    public virtual void Save(JSONNode node)
+    {
+        node["rotation.x"] = transform.eulerAngles.x;
+        node["rotation.y"] = transform.eulerAngles.y;
+        node["rotation.z"] = transform.eulerAngles.z;
+    }
+    public virtual void Load(JSONNode node) {
+        Vector3 rotationCheck = new Vector3(node["rotation.x"], node["rotation.y"], node["rotation.z"]);
+        if(rotationCheck != null && rotationCheck != Vector3.zero) { transform.eulerAngles = rotationCheck; }
+    }
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
     }
 }

@@ -45,14 +45,16 @@ public class KoboldCharacterController : MonoBehaviourPun, IPunObservable, ISava
     private float effectiveSpeed {
         get {
             float s = Mathf.Lerp(grounded?speed:speed*airSpeedMultiplier, crouchSpeed, crouchAmount);
-            float f = Mathf.Lerp(s, s*walkSpeedMultiplier, (grounded && inputWalking) ? 1f : 0f);
+            float r = Mathf.Lerp(s, s*sprintSpeedMultiplier, (grounded && isSprinting) ? 1f : 0f);
+            float f = Mathf.Lerp(r, r*walkSpeedMultiplier, (grounded && inputWalking) ? 1f : 0f);
             return f * speedMultiplier * Mathf.Lerp(transform.lossyScale.x, 1f, 0.5f);
         }
     }
     private float effectiveAccel {
         get {
             float a = Mathf.Lerp(accel, crouchAccel, crouchAmount);
-            float f = Mathf.Lerp(a, a*walkSpeedMultiplier, (grounded && inputWalking) ? 1f : 0f);
+            float r = Mathf.Lerp(a, a*sprintSpeedMultiplier, (grounded && isSprinting) ? 1f : 0f);
+            float f = Mathf.Lerp(r, r*walkSpeedMultiplier, (grounded && inputWalking) ? 1f : 0f);
             return grounded ? f : airAccel;
         }
     }
@@ -70,7 +72,8 @@ public class KoboldCharacterController : MonoBehaviourPun, IPunObservable, ISava
     }
     private float effectiveFriction {
         get {
-            return Mathf.Lerp(friction, crouchFriction, Mathf.Round(crouchAmount)) * frictionMultiplier;
+            float f = Mathf.Lerp(friction, sprintFriction, (grounded && isSprinting) ? 1f : 0f);
+            return Mathf.Lerp(f, crouchFriction, Mathf.Round(crouchAmount)) * frictionMultiplier;
         }
     }
 
@@ -117,6 +120,7 @@ public class KoboldCharacterController : MonoBehaviourPun, IPunObservable, ISava
     }
 
     public bool inputWalking = false;
+    public bool isSprinting = false;
 
     [Tooltip("Gravity applied per second to the character, generally to make the gravity feel less floaty.")]
     public Vector3 gravityMod = new Vector3(0, -0.25f, 0);
@@ -128,12 +132,16 @@ public class KoboldCharacterController : MonoBehaviourPun, IPunObservable, ISava
     public float crouchSpeed = 13f;
     [Tooltip("Speed multiplier for when inputWalking is true.")]
     public float walkSpeedMultiplier = 0.4f;
+    [Tooltip("Speed multiplier for when inputSprinting is true.")]
+    public float sprintSpeedMultiplier = 1.5f;
     [Tooltip("How quickly the player reaches max speed while walking.")]
     public float accel = 5f;
     [Tooltip("How quickly the player reaches max speed while crouch-walking.")]
     public float crouchAccel = 2f;
     [Tooltip("How quickly the player reaches max speed while in the air.")]
     public float airAccel = 6f;
+    [Tooltip("How quickly the player reaches max speed while sprinting.")]
+    public float sprintAccel = 7.5f;
     [SerializeField]
     [Tooltip("How high the character should float off the ground. (measured from capsule center to ground)")]
     public float stepHeight = 1.2f;
@@ -149,6 +157,8 @@ public class KoboldCharacterController : MonoBehaviourPun, IPunObservable, ISava
     public float friction = 9f;
     [Tooltip("How sharp the player movement is while crouched, high friction means sharper movement.")]
     public float crouchFriction = 11f;
+    [Tooltip("How sharp the player movement is while sprinting, high friction means sharper movement.")]
+    public float sprintFriction = 5f;
 
     //[Tooltip("Mask of layers containing walkable ground. Should match up with whatever the capsule collides with.")]
     //public LayerMask hitLayer;

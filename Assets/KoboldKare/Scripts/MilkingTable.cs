@@ -69,7 +69,7 @@ public class MilkingTable : UsableMachine, IAnimationStationSet {
         }
         // Consume their energy!
         for (int i = 0; i < stations.Count; i++) {
-            if (!stations[i].info.user.TryConsumeEnergy(1)) {
+            if (!stations[i].info.user.TryConsumeEnergy(1f)) {
                 yield break;
             }
         }

@@ -1243,6 +1243,34 @@ MonoBehaviour:
     m_Key: KOBOLD_VIEWER_BUTTON
     m_Metadata:
       m_Items: []
+  - m_Id: 256694271134752768
+    m_Key: SHADER_SETTING
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694438500065280
+    m_Key: SHADER_HSB_MAIN
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694682663084032
+    m_Key: SHADER_HSB_MORE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694867246014464
+    m_Key: SHADER_HSV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256755728174112768
+    m_Key: CONTRAST_FLIPPER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Key: CONTROLS_MULTIGRAB
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069329975959552
+    m_Key: CONTROLS_SPRINT
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

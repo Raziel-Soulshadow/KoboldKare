@@ -1326,6 +1326,14 @@ MonoBehaviour:
     m_Localized: Ukryj menu
     m_Metadata:
       m_Items: []
+  - m_Id: 257069329975959552
+    m_Localized: "\rBiega\u0107"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Localized: "Prze\u0142\u0105cz wielokrotne chwytanie"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

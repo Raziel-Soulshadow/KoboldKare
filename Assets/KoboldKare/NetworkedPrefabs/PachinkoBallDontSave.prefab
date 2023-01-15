@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7700415090649323704}
   - component: {fileID: 2638604192656162074}
   m_Layer: 10
-  m_Name: PachinkoBall
+  m_Name: PachinkoBallDontSave
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

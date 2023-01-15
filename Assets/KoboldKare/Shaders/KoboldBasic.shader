@@ -307,7 +307,7 @@ Shader "KoboldBasic"
 				    //Rodrigues' rotation formula
 				    outputColor.rgb = saturate(outputColor.rgb * cosAngle + cross(k, outputColor.rgb) * sin(angle) + k * dot(k, outputColor.rgb) * (1 - cosAngle));
 				    outputColor.rgb = (outputColor.rgb - 0.5f) * (_Contrast) + 0.5f;
-				    outputColor.rgb = outputColor.rgb + _Brightness;        
+				    outputColor.rgb = outputColor.rgb + (_Brightness*abs(_Brightness)*.8f);        
 				    float3 intensity = dot(outputColor.rgb, float3(0.299,0.587,0.114));
 				    outputColor.rgb = lerp(intensity, outputColor.rgb, _Saturation);
 				    return saturate(outputColor);
@@ -1403,7 +1403,7 @@ Shader "KoboldBasic"
 				    //Rodrigues' rotation formula
 				    outputColor.rgb = saturate(outputColor.rgb * cosAngle + cross(k, outputColor.rgb) * sin(angle) + k * dot(k, outputColor.rgb) * (1 - cosAngle));
 				    outputColor.rgb = (outputColor.rgb - 0.5f) * (_Contrast) + 0.5f;
-				    outputColor.rgb = outputColor.rgb + _Brightness;        
+				    outputColor.rgb = outputColor.rgb + (_Brightness*abs(_Brightness)*.8f);        
 				    float3 intensity = dot(outputColor.rgb, float3(0.299,0.587,0.114));
 				    outputColor.rgb = lerp(intensity, outputColor.rgb, _Saturation);
 				    return saturate(outputColor);
@@ -1716,7 +1716,7 @@ Shader "KoboldBasic"
 				    //Rodrigues' rotation formula
 				    outputColor.rgb = saturate(outputColor.rgb * cosAngle + cross(k, outputColor.rgb) * sin(angle) + k * dot(k, outputColor.rgb) * (1 - cosAngle));
 				    outputColor.rgb = (outputColor.rgb - 0.5f) * (_Contrast) + 0.5f;
-				    outputColor.rgb = outputColor.rgb + _Brightness;        
+				    outputColor.rgb = outputColor.rgb + (_Brightness*abs(_Brightness)*.8f);        
 				    float3 intensity = dot(outputColor.rgb, float3(0.299,0.587,0.114));
 				    outputColor.rgb = lerp(intensity, outputColor.rgb, _Saturation);
 				    return saturate(outputColor);
@@ -2345,7 +2345,7 @@ Shader "KoboldBasic"
 				    //Rodrigues' rotation formula
 				    outputColor.rgb = saturate(outputColor.rgb * cosAngle + cross(k, outputColor.rgb) * sin(angle) + k * dot(k, outputColor.rgb) * (1 - cosAngle));
 				    outputColor.rgb = (outputColor.rgb - 0.5f) * (_Contrast) + 0.5f;
-				    outputColor.rgb = outputColor.rgb + _Brightness;        
+				    outputColor.rgb = outputColor.rgb + (_Brightness*abs(_Brightness)*.8f);        
 				    float3 intensity = dot(outputColor.rgb, float3(0.299,0.587,0.114));
 				    outputColor.rgb = lerp(intensity, outputColor.rgb, _Saturation);
 				    return saturate(outputColor);

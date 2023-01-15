@@ -52,7 +52,7 @@ public class OvipositionSpot : GenericUsable, IAnimationStationSet {
             yield break;
         }
         
-        if (!k.TryConsumeEnergy(1)) {
+        if (!k.TryConsumeEnergy(1f)) {
             yield break;
         }
         // Find a working penetrable that is enabled, prefer vaginas if we have em.

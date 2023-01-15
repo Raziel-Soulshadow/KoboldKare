@@ -1315,6 +1315,14 @@ MonoBehaviour:
     m_Localized: "Nascondi Men\xF9"
     m_Metadata:
       m_Items: []
+  - m_Id: 257069329975959552
+    m_Localized: Correre
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Localized: Attiva/disattiva presa multipla
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

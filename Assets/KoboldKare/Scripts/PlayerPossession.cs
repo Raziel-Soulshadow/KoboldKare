@@ -51,6 +51,7 @@ public class PlayerPossession : MonoBehaviourPun {
     public GameObject grabPrompt;
     public GameObject equipmentUI;
     private bool switchedMode;
+    private bool sprinting;
     private bool pauseInput;
     private bool rotating;
     private bool grabbing;
@@ -122,6 +123,7 @@ public class PlayerPossession : MonoBehaviourPun {
         controls.actions["SwitchGrabMode"].performed += OnShiftMode;
         controls.actions["Grab"].performed += OnGrabInput;
         controls.actions["Grab"].canceled += OnGrabCancelled;
+        controls.actions["MultiGrabToggle"].performed += OnGrabToggleInput;
         controls.actions["Gib"].performed += OnGibInput;
         controls.actions["Rotate"].performed += OnRotateInput;
         controls.actions["Rotate"].canceled += OnRotateCancelled;
@@ -135,6 +137,8 @@ public class PlayerPossession : MonoBehaviourPun {
         controls.actions["HipControl"].canceled += OnCanceledHipInput;
         controls.actions["ResetHip"].performed += OnResetHipInput;
         controls.actions["Chat"].performed += OnChatInput;
+        controls.actions["Sprint"].performed += OnSprintInput;
+        controls.actions["Sprint"].canceled += OnSprintCancelled;
     }
 
     private void OnDisable() {
@@ -145,6 +149,7 @@ public class PlayerPossession : MonoBehaviourPun {
         controls.actions["SwitchGrabMode"].performed -= OnShiftMode;
         controls.actions["Grab"].performed -= OnGrabInput;
         controls.actions["Grab"].canceled -= OnGrabCancelled;
+        controls.actions["MultiGrabToggle"].performed -= OnGrabToggleInput;
         controls.actions["Gib"].performed -= OnGibInput;
         controls.actions["Rotate"].performed -= OnRotateInput;
         controls.actions["Rotate"].canceled -= OnRotateCancelled;
@@ -158,6 +163,8 @@ public class PlayerPossession : MonoBehaviourPun {
         controls.actions["HipControl"].canceled -= OnCanceledHipInput;
         controls.actions["ResetHip"].performed -= OnResetHipInput;
         controls.actions["Chat"].performed -= OnChatInput;
+        controls.actions["Sprint"].performed -= OnSprintInput;
+        controls.actions["Sprint"].canceled -= OnSprintCancelled;
     }
 
     private void OnDestroy() {
@@ -232,6 +239,11 @@ public class PlayerPossession : MonoBehaviourPun {
         return Quaternion.Euler(-eyeRot.y, eyeRot.x, 0) * Vector3.forward;
     }
 
+    void FixedUpdate()
+	{
+        if (sprinting) { sprinting = kobold.TryConsumeEnergy(0.05f * Time.fixedDeltaTime); }
+
+    }
     // Update is called once per frame
     void Update() {
         if (Cursor.lockState != CursorLockMode.Locked) {
@@ -293,6 +305,23 @@ public class PlayerPossession : MonoBehaviourPun {
         //controller.inputCrouched = value.Get<float>();
         controller.SetInputCrouched(value.Get<float>());
     }
+    public void OnSprintInput(InputAction.CallbackContext ctx)
+	{
+        if (kobold.TryConsumeEnergy(0.02f)) 
+        { 
+            controller.isSprinting = true; 
+            sprinting = true; 
+        }
+        else { StartCoroutine(PauseInputForSeconds(1f)); }
+
+    }
+
+    public void OnSprintCancelled(InputAction.CallbackContext ctx)
+	{
+        controller.isSprinting = false;
+        sprinting = false;
+	}
+
     public void OnGib() {
         //playerDieEvent.Raise(transform.position);
         //spoilable.spoilIntensity = 1f;
@@ -307,7 +336,15 @@ public class PlayerPossession : MonoBehaviourPun {
             pGrabber.TryGrab();
         }
     }
-    
+
+    public void OnGrabToggleInput(InputAction.CallbackContext ctx)
+    {
+        int amount = kobold.ToggleMultiGrab();
+        //Debug.Log("Possesser: Amount- " + amount);
+        grabber.SetMaxGrabCount(amount);
+    }
+
+
     public void OnResetHipInput(InputAction.CallbackContext ctx) {
         characterControllerAnimator.SetHipVector(Vector2.zero);
     }

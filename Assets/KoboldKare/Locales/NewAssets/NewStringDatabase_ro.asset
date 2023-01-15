@@ -1333,6 +1333,14 @@ MonoBehaviour:
     m_Localized: Ascunde meniul
     m_Metadata:
       m_Items: []
+  - m_Id: 257069329975959552
+    m_Localized: Alerga
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Localized: "Comuta\u021Bi \xEEncas\u0103ri multiple"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

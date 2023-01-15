@@ -89,7 +89,7 @@ public class GrinderManager : UsableMachine, IAnimationStationSet {
             yield break;
         }
         
-        if (station.info.user.TryConsumeEnergy(1)) {
+        if (station.info.user.TryConsumeEnergy(1f)) {
             station.info.user.photonView.RPC(nameof(CharacterControllerAnimator.StopAnimationRPC), RpcTarget.All);
             photonView.RPC(nameof(BeginGrind), RpcTarget.All);
             yield return new WaitForSeconds(18f);

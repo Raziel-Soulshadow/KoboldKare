@@ -122,7 +122,7 @@ public class SimpleCameraController : MonoBehaviour
         var translation = GetInputTranslationDirection() * Time.deltaTime;
 
         // Speed up movement when shift key held
-        if (controls.actions["Walk"].ReadValue<float>()>0.5f) {
+        if (controls.actions["Sprint"].ReadValue<float>()>0.5f) {
             translation /= 10.0f;
         }
         

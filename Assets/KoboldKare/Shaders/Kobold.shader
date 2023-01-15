@@ -332,8 +332,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -949,8 +949,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -1343,8 +1343,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -1716,8 +1716,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -2085,8 +2085,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -2444,8 +2444,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -2828,8 +2828,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;
@@ -3158,8 +3158,8 @@ Shader "Kobold"
 			float4 MyCustomExpression1_g17( float4 hsbc, float4 startColor )
 			{
 				    float _Hue = 360 * hsbc.r;
-				    float _Brightness = hsbc.g * 2 - 1;
-				    float _Contrast = hsbc.b * 2;
+				    float _Contrast = hsbc.b * 4 - 2;
+				    float _Brightness = (hsbc.g + (-.075 + (.075*_Contrast))) * 2 - 1;
 				    float _Saturation = hsbc.a * 2;
 				 
 				    float4 outputColor = startColor;

@@ -429,7 +429,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 516099199002
-    m_Localized: Dick
+    m_Localized: Has a Dick?
     m_Metadata:
       m_Items: []
   - m_Id: 516099199003
@@ -1320,6 +1320,34 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 255663042125979648
     m_Localized: Hide Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694271134752768
+    m_Localized: Kobold Color-Scheme
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694438500065280
+    m_Localized: HSB (default)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694682663084032
+    m_Localized: HSB w/ Wider Brightness Range
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256694867246014464
+    m_Localized: HSV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 256755728174112768
+    m_Localized: Flip Colors?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Localized: Toggle Multigrab
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069329975959552
+    m_Localized: Sprint
     m_Metadata:
       m_Items: []
   references:

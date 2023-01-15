@@ -70,6 +70,7 @@ public class CharacterControllerAnimator : MonoBehaviourPun, IPunObservable, ISa
     [SerializeField] private float crouchedAnimationSpeedMultiplier = 1f;
     [SerializeField] private float walkingAnimationSpeedMultiplier = 1f;
     [SerializeField] private float standingAnimationSpeedMultiplier = 1f;
+    [SerializeField] private float sprintingAnimationSpeedMultiplier = 0.6f;
     private float crouchLerper;
     private LookAtHandler handler;
 
@@ -253,6 +254,10 @@ public class CharacterControllerAnimator : MonoBehaviourPun, IPunObservable, ISa
         if (controller.inputWalking) {
             speedTarget *= walkingAnimationSpeedMultiplier;
         }
+        if (controller.isSprinting)
+		{
+            speedTarget *= sprintingAnimationSpeedMultiplier;
+		}
         speedLerp = Mathf.MoveTowards(speedLerp, speedTarget, Time.deltaTime * 10f);
         float speed = speedLerp;
         tempDir = Vector3.RotateTowards(tempDir, dir, Time.deltaTime * 10f, 0f);

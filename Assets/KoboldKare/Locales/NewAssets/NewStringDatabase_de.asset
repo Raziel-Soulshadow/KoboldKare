@@ -1322,6 +1322,14 @@ MonoBehaviour:
     m_Localized: "Men\xFC ausblenden"
     m_Metadata:
       m_Items: []
+  - m_Id: 257069329975959552
+    m_Localized: Laufen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Localized: "\rMehrfaches Greifen umschalten"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

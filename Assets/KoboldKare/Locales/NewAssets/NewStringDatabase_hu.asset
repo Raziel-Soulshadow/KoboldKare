@@ -1324,6 +1324,14 @@ MonoBehaviour:
     m_Localized: "Men\xFC elrejt\xE9se"
     m_Metadata:
       m_Items: []
+  - m_Id: 257069329975959552
+    m_Localized: Fuss
+    m_Metadata:
+      m_Items: []
+  - m_Id: 257069322589790208
+    m_Localized: "\rT\xF6bbsz\xF6r\xF6s megragad\xE1s v\xE1lt\xE1sa"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

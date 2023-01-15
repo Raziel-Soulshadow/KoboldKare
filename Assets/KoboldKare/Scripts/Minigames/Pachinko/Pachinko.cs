@@ -149,6 +149,6 @@ public class Pachinko : GenericUsable {
     void OnValidate() {
         pachinkoBallPrefab.OnValidate();
     }
-    public override void Save(JSONNode node) { }
+    public override void Save(JSONNode node) {  }
     public override void Load(JSONNode node) { }
 }
