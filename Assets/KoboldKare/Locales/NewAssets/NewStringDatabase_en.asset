@@ -1350,6 +1350,26 @@ MonoBehaviour:
     m_Localized: Sprint
     m_Metadata:
       m_Items: []
+  - m_Id: 258772477362921472
+    m_Localized: Genetic Variation (0 is max, .6 is none)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259629233974632448
+    m_Localized: Remove Stomach-gurgling Sound?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259629538619514880
+    m_Localized: Mute after Delay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259629658522083328
+    m_Localized: Fade after Delay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259630321389887488
+    m_Localized: 'Delay in Seconds:'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

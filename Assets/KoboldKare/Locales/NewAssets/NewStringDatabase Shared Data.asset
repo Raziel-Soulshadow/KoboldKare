@@ -1271,6 +1271,26 @@ MonoBehaviour:
     m_Key: CONTROLS_SPRINT
     m_Metadata:
       m_Items: []
+  - m_Id: 258772477362921472
+    m_Key: SETTING_GENETIC_VARIATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259629233974632448
+    m_Key: SETTING_GARGLESOUND
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259629538619514880
+    m_Key: SETTING_GARGLE_TYPE_DELAY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259629658522083328
+    m_Key: SETTING_GARGLE_TYPE_FADE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259630321389887488
+    m_Key: SETTING_GARGLE_DELAY_SECONDS
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

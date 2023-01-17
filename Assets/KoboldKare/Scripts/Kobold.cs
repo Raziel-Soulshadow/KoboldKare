@@ -13,6 +13,7 @@ using SimpleJSON;
 using SkinnedMeshDecals;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using UnityScriptableSettings;
 
 public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMagicCallback, ISavable, IValuedGood {
     public StatusEffect koboldStatus;
@@ -102,6 +103,9 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
     private static Collider[] colliders = new Collider[32];
     private WaitForSeconds waitSpurt;
     private bool milking = false;
+
+    private float gargleStopTime = 0f, gargleCurrentTime = 0f, gurgleCurrentTime = 0f;
+    private bool gargleMod = false, gargleFade = true;
     
     public IEnumerable<InflatableListener> GetAllInflatableListeners() {
         foreach (var listener in belly.GetInflatableListeners()) {
@@ -355,6 +359,38 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
             gargleSource.loop = true;
         }
         belly.AddListener(new InflatableSoundPack(tummyGrumbles, tummyGrumbleSource, this));
+
+        SettingInt gargleSet = SettingsManager.GetSetting("GargleSetting") as SettingInt;
+        SettingInt gargleStop = SettingsManager.GetSetting("GargleStopTime") as SettingInt;
+        int gargleSetting = gargleSet.GetValue();
+        switch (gargleSetting)
+        {
+            case 0:
+                gargleMod = false;
+                gargleSource.mute = false;
+                tummyGrumbleSource.mute = false;
+                break;
+            case 1:
+                gargleMod = false;
+                gargleSource.mute = true;
+                tummyGrumbleSource.mute = true;
+                break;
+            case 2:
+                gargleMod = true;
+                gargleFade = false;
+                gargleSource.mute = false;
+                tummyGrumbleSource.mute = false;
+                gargleStopTime = (float)gargleStop.GetValue();
+                break;
+            case 3:
+                gargleMod = true;
+                gargleFade = true;
+                gargleSource.mute = false;
+                tummyGrumbleSource.mute = false;
+                gargleStopTime = (float)gargleStop.GetValue();
+                break;
+        }
+
     }
 
     void Start() {
@@ -440,6 +476,31 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
         foreach(var dick in activeDicks) {
             dick.bonerInflater.SetSize(arousal*0.95f + (0.05f * Mathf.Clamp01(Mathf.Sin(Time.time*2f)))*arousal, dick.info);
         }
+        if (gargleMod)
+        {
+            if (gargleSource.isPlaying == true)
+            {
+                if(!gargleFade && gargleCurrentTime > gargleStopTime) { gargleCurrentTime = -20f; }
+                gargleCurrentTime = Mathf.Clamp(gargleCurrentTime + Time.deltaTime, -20f, gargleStopTime + 20f);
+                if (gargleCurrentTime - gargleStopTime > 10f || gargleCurrentTime < 0f) { gargleSource.mute = true; }
+                else { gargleSource.volume = Mathf.Clamp(.8f - ((gargleCurrentTime - gargleStopTime) * .08f), 0f, 0.8f); gargleSource.mute = false; }
+
+            }
+            else if (gargleFade || gargleCurrentTime >= 0f) { gargleCurrentTime = Mathf.Clamp(gargleCurrentTime - Time.deltaTime, 0f, gargleStopTime + 20f); }
+            else { gargleCurrentTime = Mathf.Clamp(gargleCurrentTime + Time.deltaTime, -20f, gargleStopTime + 20f); }
+            if (tummyGrumbleSource.isPlaying == true)
+            {
+                if (!gargleFade && gurgleCurrentTime > gargleStopTime*2f) { gurgleCurrentTime = -40f; }
+                gurgleCurrentTime = Mathf.Clamp(gurgleCurrentTime + Time.deltaTime, -40f, gargleStopTime*2 + 20f);
+                if (gurgleCurrentTime - (gargleStopTime*2) > 10f || gurgleCurrentTime < 0f) { tummyGrumbleSource.mute = true; }
+                else { tummyGrumbleSource.volume = Mathf.Clamp(.8f - ((gurgleCurrentTime - gargleStopTime*2) * .08f), 0f, 0.8f); tummyGrumbleSource.mute = false; }
+
+            }
+            else if (gargleFade || gurgleCurrentTime >= 0f) { gurgleCurrentTime = Mathf.Clamp(gurgleCurrentTime - Time.deltaTime, 0f, gargleStopTime*2 + 20f); }
+            else { gurgleCurrentTime = Mathf.Clamp(gurgleCurrentTime + Time.deltaTime, -40f, gargleStopTime*2 + 20f); }
+
+        }    
+        
     }
     private void FixedUpdate() {
         if (grabbed) {
@@ -558,8 +619,8 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
         if (gargleSource.enabled == false || !gargleSource.isPlaying) {
             gargleSource.enabled = true;
             garglePack.Play(gargleSource);
+            gargleSource.pitch = Random.Range(.95f, 1.05f);
             //gurgleSource.Play();
-            gargleSource.pitch = 1f;
             StartCoroutine(WaitAndThenStopGargling(0.25f));
         }
     }
