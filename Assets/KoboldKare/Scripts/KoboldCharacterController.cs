@@ -395,6 +395,7 @@ public class KoboldCharacterController : MonoBehaviourPun, IPunObservable, ISava
         } else {
             inputJump = (bool)stream.ReceiveNext();
             targetCrouched = (float)stream.ReceiveNext();
+            PhotonProfiler.LogReceive(sizeof(bool)+sizeof(float));
         }
     }
 

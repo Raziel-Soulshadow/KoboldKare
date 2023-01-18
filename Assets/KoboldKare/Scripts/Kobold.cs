@@ -9,6 +9,8 @@ using PenetrationTech;
 using System.IO;
 using Naelstrof.Inflatable;
 using Naelstrof.Mozzarella;
+using NetStack.Quantization;
+using NetStack.Serialization;
 using SimpleJSON;
 using SkinnedMeshDecals;
 using UnityEngine.Serialization;
@@ -63,7 +65,9 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
     private Inflatable boobs;
     [SerializeField]
     private Material milkSplatMaterial;
-
+    [SerializeField]
+    private LayerMask heartHitMask;
+    
     private UsableColliderComparer usableColliderComparer;
     public ReagentContents metabolizedContents;
     
@@ -137,6 +141,7 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
     
     [PunRPC]
     public IEnumerator MilkRoutine() {
+        PhotonProfiler.LogReceive(1);
         while (milking) {
             yield return null;
         }
@@ -157,8 +162,10 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
                             GenericReagentContainer container =
                                 hit.collider.GetComponentInParent<GenericReagentContainer>();
                             if (container != null && this != null) {
+                                BitBuffer buffer = new BitBuffer(4);
+                                buffer.AddReagentContents(alloc.Spill(alloc.volume * 0.1f));
                                 container.photonView.RPC(nameof(GenericReagentContainer.AddMixRPC), RpcTarget.All,
-                                    alloc.Spill(alloc.volume * 0.1f), photonView.ViewID, (byte)GenericReagentContainer.InjectType.Spray);
+                                    buffer, photonView.ViewID, (byte)GenericReagentContainer.InjectType.Spray);
                             }
                         }
                         milkSplatMaterial.color = color;
@@ -189,7 +196,29 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
     [PunRPC]
     public void Cum() {
         if (photonView.IsMine && activeDicks.Count == 0) {
-            PhotonNetwork.Instantiate(heartPrefab.photonName, hip.transform.position, Quaternion.identity, 0, new object[] { GetGenes() });
+            bool foundHeart = false;
+            int hits = Physics.OverlapSphereNonAlloc(hip.position, 5f, colliders, heartHitMask);
+            for (int i = 0; i < hits; i++) {
+                // Found a nearby heart!
+                PhotonView fruitView = colliders[i].GetComponentInParent<PhotonView>();
+                if (fruitView != null && fruitView.name.Contains(heartPrefab.photonName)) {
+                    BitBuffer reagentBuffer = new BitBuffer(16);
+                    ReagentContents loveContents = new ReagentContents();
+                    loveContents.AddMix(ReagentDatabase.GetReagent("Love").GetReagent(10f));
+                    reagentBuffer.AddReagentContents(loveContents);
+                    fruitView.RPC(nameof(GenericReagentContainer.ForceMixRPC), RpcTarget.All, reagentBuffer,
+                        photonView.ViewID, (byte)GenericReagentContainer.InjectType.Inject);
+                    foundHeart = true;
+                    break;
+                }
+            }
+
+            // No nearby hearts, spawn a new one.
+            if (!foundHeart) {
+                BitBuffer buffer = new BitBuffer(16);
+                buffer.AddKoboldGenes(GetGenes());
+                PhotonNetwork.Instantiate(heartPrefab.photonName, hip.transform.position, Quaternion.identity, 0, new object[] { buffer });
+            }
         }
         foreach(var dickSet in activeDicks) {
             // TODO: This is a really, really terrible way to make a dick cum lol. Clean this up.
@@ -582,8 +611,8 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
             reagent.GetConsumptionEvent().OnConsume(this, reagent, ref processedAmount, ref consumedReagents, ref addbackReagents, ref genes, ref newEnergy);
             pair.volume -= processedAmount;
         }
-        bellyContainer.AddMixRPC(contents, -1, (byte)GenericReagentContainer.InjectType.Inject); 
-        bellyContainer.AddMixRPC(addbackReagents, -1, (byte)GenericReagentContainer.InjectType.Inject);
+        bellyContainer.AddMix(contents, GenericReagentContainer.InjectType.Inject); 
+        bellyContainer.AddMix(addbackReagents, GenericReagentContainer.InjectType.Inject);
         float overflowEnergy = Mathf.Max(newEnergy - GetMaxEnergy(), 0f);
         if (overflowEnergy != 0f) {
             genes = genes.With(fatSize: genes.fatSize + overflowEnergy);
@@ -627,21 +656,26 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting) {
-            stream.SendNext((byte)Mathf.RoundToInt(arousal*255f));
-            stream.SendNext(metabolizedContents);
-            stream.SendNext(consumedReagents);
-            stream.SendNext(energy);
-            stream.SendNext(GetGenes());
+            BitBuffer sendBuffer = new BitBuffer(32);
+            sendBuffer.AddByte((byte)Mathf.RoundToInt(arousal * 255f));
+            sendBuffer.AddReagentContents(metabolizedContents);
+            sendBuffer.AddReagentContents(consumedReagents);
+            ushort quantizedEnergy = HalfPrecision.Quantize(energy);
+            sendBuffer.AddUShort(quantizedEnergy);
+            sendBuffer.AddKoboldGenes(GetGenes());
+            stream.SendNext(sendBuffer);
         } else {
-            arousal = (byte)stream.ReceiveNext()/255f;
-            metabolizedContents.Copy((ReagentContents)stream.ReceiveNext());
-            consumedReagents.Copy((ReagentContents)stream.ReceiveNext());
-            float newEnergy = (float)stream.ReceiveNext();
+            BitBuffer data = (BitBuffer)stream.ReceiveNext();
+            arousal = data.ReadByte()/255f;
+            metabolizedContents.Copy(data.ReadReagentContents());
+            consumedReagents.Copy(data.ReadReagentContents());
+            float newEnergy = HalfPrecision.Dequantize(data.ReadUShort());
             if (Math.Abs(newEnergy - energy) > 0.01f) {
                 energy = newEnergy;
                 energyChanged?.Invoke(energy, GetGenes().maxEnergy);
             }
-            SetGenes((KoboldGenes)stream.ReceiveNext());
+            SetGenes(data.ReadKoboldGenes());
+            PhotonProfiler.LogReceive(data.Length);
         }
     }
 
@@ -651,14 +685,13 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
             return;
         }
 
-        if (info.photonView.InstantiationData.Length > 0 && info.photonView.InstantiationData[0] is KoboldGenes) {
-            SetGenes((KoboldGenes)info.photonView.InstantiationData[0]);
-        } else {
-            SetGenes(new KoboldGenes().Randomize());
-        }
-
-        if (info.photonView.InstantiationData.Length > 1 && info.photonView.InstantiationData[1] is bool) {
-            if ((bool)info.photonView.InstantiationData[1] == true) {
+        if (info.photonView.InstantiationData.Length > 0 && info.photonView.InstantiationData[0] is BitBuffer) {
+            BitBuffer buffer = (BitBuffer)info.photonView.InstantiationData[0];
+            // Might be a shared buffer
+            buffer.SetReadPosition(0);
+            SetGenes(buffer.ReadKoboldGenes());
+            bool isPlayer = buffer.ReadBool();
+            if (isPlayer) {
                 GetComponentInChildren<KoboldAIPossession>(true).gameObject.SetActive(false);
                 if (info.Sender != null) { // Possible for instantiated kobold's owner to have disconnected. (late join instantiate).
                     info.Sender.TagObject = this;
@@ -667,7 +700,11 @@ public class Kobold : GeneHolder, IGrabbable, IPunObservable, IPunInstantiateMag
                 GetComponentInChildren<KoboldAIPossession>(true).gameObject.SetActive(true);
                 FarmSpawnEventHandler.TriggerProduceSpawn(gameObject);
             }
+            PhotonProfiler.LogReceive(buffer.Length);
+        } else {
+            SetGenes(new KoboldGenes().Randomize());
         }
+        
         spawned?.Invoke(this);
     }
 
