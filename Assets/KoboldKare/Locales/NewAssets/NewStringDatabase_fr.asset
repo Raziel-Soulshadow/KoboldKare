@@ -1315,11 +1315,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 257069329975959552
-    m_Localized: Cours
+    m_Localized: Sprintant
     m_Metadata:
       m_Items: []
   - m_Id: 257069322589790208
-    m_Localized: Basculer la saisie multiple
+    m_Localized: "modifier le montant d\xE9tenu"
     m_Metadata:
       m_Items: []
   references:

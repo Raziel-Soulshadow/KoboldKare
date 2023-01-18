@@ -1309,11 +1309,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 257069329975959552
-    m_Localized: "L\xF8b"
+    m_Localized: "L\xF8be"
     m_Metadata:
       m_Items: []
   - m_Id: 257069322589790208
-    m_Localized: "Sl\xE5 Multiple Grab til/fra"
+    m_Localized: "\rSkift til at holde mere"
     m_Metadata:
       m_Items: []
   references:

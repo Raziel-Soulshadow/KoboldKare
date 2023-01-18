@@ -1320,7 +1320,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 257069322589790208
-    m_Localized: Attiva/disattiva presa multipla
+    m_Localized: Modificare l'importo detenuto
     m_Metadata:
       m_Items: []
   references:
