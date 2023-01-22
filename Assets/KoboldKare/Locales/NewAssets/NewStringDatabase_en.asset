@@ -1351,7 +1351,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 258772477362921472
-    m_Localized: Genetic Variation (0 is max, .6 is none)
+    m_Localized: 'Genetic Variation:'
     m_Metadata:
       m_Items: []
   - m_Id: 259629233974632448
@@ -1368,6 +1368,23 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 259630321389887488
     m_Localized: 'Delay in Seconds:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261047227959304192
+    m_Localized: Random Egg Brightness
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261049969238958080
+    m_Localized: Random Egg Saturation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261511161690546176
+    m_Localized: "Genetic Variation:\r\n0 means the child kobold will always be an
+      exact average of their parents, while a value of 1 can have stats anywhere
+      between either parent, chosen on a bell curve with a roughly 1/30 chance of
+      matching a parent exactly. \r\n\r\nRandom Brightness/Saturation:\r\nAffects
+      the random store eggs, 0 means they generate the same as normal, while 2 gives
+      significantly more extreme values and -2 gives significantly more middle values."
     m_Metadata:
       m_Items: []
   references:

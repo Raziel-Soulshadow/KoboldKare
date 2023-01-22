@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityScriptableSettings;
 
 public class PlayerKoboldLoader : MonoBehaviour {
-    private static readonly string[] settingNames = {"Hue", "Brightness", "Contrast", "Saturation", "BoobSize", "KoboldSize", "DickSize", "DickThickness", "BallSize"};
+    private static readonly string[] settingNames = {"Hue", "Brightness", "Contrast", "Saturation", "BoobSize", "KoboldSize", "DickSize", "DickLength", "BallSize"};
     public Kobold targetKobold;
     void Start() {
         foreach(string settingName in settingNames) {
@@ -113,7 +113,7 @@ public class PlayerKoboldLoader : MonoBehaviour {
             case "Saturation": genes.saturation = (byte)Mathf.RoundToInt(setting.GetValue()*255f); break;
             case "DickSize": genes.dickSize = Mathf.Lerp(0f, 10f, setting.GetValue()); break;
             case "BallSize": genes.ballSize = Mathf.Lerp(5f, 10f, setting.GetValue()); break;
-            case "DickThickness": genes.dickThickness = Mathf.Lerp(0.1f, 1.5f, setting.GetValue()); break;
+            case "DickLength": genes.dickThickness = Mathf.Lerp(0f, 1f, setting.GetValue()); break;
             case "BoobSize": genes.breastSize = setting.GetValue() * 30f; break;
             case "KoboldSize": genes.baseSize = setting.GetValue() * 20f; break;
         }

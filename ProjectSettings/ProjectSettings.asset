@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Naelstrof
-  productName: KoboldKare
+  companyName: Naelstrof/Raz
+  productName: KoboldKare(RazMod)
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -134,7 +134,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1_2022_1
+  bundleVersion: 420_69_1_2
   preloadedAssets:
   - {fileID: 11400000, guid: a9ace073e7f44b647894afdacacd488d, type: 2}
   - {fileID: 11400000, guid: 0fba2679222f6944ab7e908389d82c8d, type: 2}
@@ -157,7 +157,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.Naelstrof.KoboldKare
+    Standalone: com.Naelstrof-Raz.KoboldKare-RazMod-
   buildNumber:
     Standalone: 20
     iPhone: 0

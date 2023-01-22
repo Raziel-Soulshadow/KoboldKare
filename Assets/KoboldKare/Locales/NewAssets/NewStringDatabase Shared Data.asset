@@ -1291,6 +1291,18 @@ MonoBehaviour:
     m_Key: SETTING_GARGLE_DELAY_SECONDS
     m_Metadata:
       m_Items: []
+  - m_Id: 261047227959304192
+    m_Key: SETTING_INITIAL_BRIGHTNESS_VARIATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261049969238958080
+    m_Key: SETTING_INITIAL_SATURATION_VARIATION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261511161690546176
+    m_Key: GAMEPLAY_SETTING_INFO
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

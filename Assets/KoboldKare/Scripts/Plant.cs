@@ -26,7 +26,7 @@ public class Plant : GeneHolder, IPunInstantiateMagicCallback, IPunObservable, I
     public delegate void SwitchAction();
     public event SwitchAction switched;
     
-    private static readonly int BrightnessContrastSaturation = Shader.PropertyToID("_HueBrightnessContrastSaturation");
+    private static readonly int HueBrightnessContrastSaturation = Shader.PropertyToID("_HueBrightnessContrastSaturation");
     private bool growing;
     public delegate void PlantSpawnEventAction(GameObject obj, ScriptablePlant plant);
     public static event PlantSpawnEventAction planted;
@@ -84,10 +84,10 @@ public class Plant : GeneHolder, IPunInstantiateMagicCallback, IPunObservable, I
 
     public override void SetGenes(KoboldGenes newGenes) {
         if (display != null) {
-            Vector4 hbcs = new Vector4(newGenes.hue / 255f, newGenes.brightness / 255f, 0.5f, newGenes.saturation / 255f);
+            Vector4 hbcs = new Vector4(newGenes.hue / 255f, newGenes.brightness / 255f, newGenes.contrast / 255f, newGenes.saturation / 255f);
             foreach (var r in display.GetComponentsInChildren<Renderer>()) {
                 foreach (var material in r.materials) {
-                    material.SetColor(BrightnessContrastSaturation, hbcs);
+                    material.SetColor(HueBrightnessContrastSaturation, hbcs);
                 }
             }
         }

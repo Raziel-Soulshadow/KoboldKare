@@ -540,7 +540,7 @@
                 {
                     "name": "",
                     "id": "a1b639b7-5822-4944-83fa-9b3a1e625a48",
-                    "path": "<Gamepad>/start",
+                    "path": "<Gamepad>/select",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -738,7 +738,7 @@
                 {
                     "name": "",
                     "id": "ce77b176-e85c-4c9f-9dfb-59c10e2e0f65",
-                    "path": "<Gamepad>/dpad/left",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -760,7 +760,7 @@
                 {
                     "name": "",
                     "id": "2b1f74f4-3b6a-4654-a845-8628cb598ac0",
-                    "path": "<Gamepad>/dpad/right",
+                    "path": "<Gamepad>/dpad/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -782,7 +782,7 @@
                 {
                     "name": "",
                     "id": "2c38f9d2-ed5d-492b-830f-8655f719b29d",
-                    "path": "<Gamepad>/select",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -848,7 +848,7 @@
                 {
                     "name": "",
                     "id": "3e8830ff-bd5b-4e06-9c7e-1cd269ce1f0e",
-                    "path": "<Gamepad>/dpad/up",
+                    "path": "<Gamepad>/dpad/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1002,7 +1002,7 @@
                 {
                     "name": "",
                     "id": "09bf6c37-150d-43a8-b8dd-5028c43d178b",
-                    "path": "<Keyboard>/x",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
