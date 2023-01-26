@@ -65,7 +65,7 @@ public class ReagentContents : IEnumerable<Reagent> {
         }
         changed?.Invoke(this);
     }
-    private const float metabolizationVolumeEpsilon = 0.1f;
+    private const float metabolizationVolumeEpsilon = 0.4f;
     public float volume {
         get {
             float v = 0f;
@@ -139,7 +139,7 @@ public class ReagentContents : IEnumerable<Reagent> {
         }
         foreach(var pair in contents) {
             float metabolizationHalfLife = ReagentDatabase.GetReagent(pair.Key).GetMetabolizationHalfLife();
-            float metaHalfLife = metabolizationHalfLife == 0 ? pair.Value.volume : pair.Value.volume * Mathf.Pow(0.5f, deltaTime / metabolizationHalfLife);
+            float metaHalfLife = metabolizationHalfLife == 0 ? pair.Value.volume : pair.Value.volume * Mathf.Pow(0.5f, deltaTime / metabolizationHalfLife);  //delta time always 2
             // halflife on a tiny value suuucks, just kill it if the value gets small enough so we don't spam incredibly tiny updates.
             if (pair.Value.volume <= metabolizationVolumeEpsilon) {
                 metabolizeContents.AddMix(pair.Value);

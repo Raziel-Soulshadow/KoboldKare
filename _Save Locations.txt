@@ -1,0 +1,3 @@
+Normal Save Files are located in User/Appdata/LocalLow/Naelstrof.
+
+The folder for the mod is instead in LocalLow/Naelstrof-Raz

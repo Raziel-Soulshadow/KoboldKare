@@ -10,7 +10,7 @@ public class MaxEnergyGivingConsumption : ConsumptionDiscreteTrigger {
     [SerializeField] private PhotonGameObjectReference floaterInfoPrefab;
     protected override void OnTrigger(Kobold k, ScriptableReagent scriptableReagent, ref float amountProcessed,
         ref ReagentContents reagentMemory, ref ReagentContents addBack, ref KoboldGenes genes, ref float energy) {
-        genes.maxEnergy = (byte)Mathf.Min(genes.maxEnergy+1, 255);
+        genes.maxEnergy = genes.maxEnergy + 1f;
         GameObject obj = PhotonNetwork.Instantiate(floaterInfoPrefab.photonName, k.transform.position + Vector3.up*0.5f, Quaternion.identity);
         obj.GetPhotonView().StartCoroutine(DestroyInSeconds(obj));
         base.OnTrigger(k, scriptableReagent, ref amountProcessed, ref reagentMemory, ref addBack, ref genes, ref energy);
