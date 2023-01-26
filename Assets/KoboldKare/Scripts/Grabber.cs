@@ -15,15 +15,6 @@ public class Grabber : MonoBehaviourPun {
 
     [SerializeField] private GameObject activateUI;
     [SerializeField] private GameObject throwUI;
-    [SerializeField] private GameObject multigrabUI;
-    [SerializeField] private Transform multigrabSlider;
-
-    public enum MultigrabStatus
-	{
-        On = 0,
-        Off,
-	} 
-    public MultigrabStatus status = MultigrabStatus.On;
 
     private ColliderSorter sorter;
 
@@ -213,8 +204,6 @@ public class Grabber : MonoBehaviourPun {
 
     public void SetMaxGrabCount(int count) {
         maxGrabCount = count;
-        if(maxGrabCount == 1) { status = MultigrabStatus.Off; }
-        else { status = MultigrabStatus.On; }
     }
     public void Validate() {
         bool canActivate = false;
@@ -356,7 +345,12 @@ public class Grabber : MonoBehaviourPun {
             return;
         }
 
-        var position = view.position;
+    public void TryGrab(int tryGrabCount) {
+        if (grabbedObjects.Count >= tryGrabCount) {
+            return;
+        }
+
+            var position = view.position;
         int hits = Physics.OverlapSphereNonAlloc(position, 1f, colliders);
         sorter.SetRay(new Ray(position, view.forward));
         System.Array.Sort(colliders, 0, hits, sorter);
@@ -399,7 +393,6 @@ public class Grabber : MonoBehaviourPun {
         foreach (var grab in grabbedObjects) {
             grab.Set(view.position, view.rotation);
         }
-        multigrabSlider.transform.localPosition = Vector3.Lerp(multigrabSlider.transform.localPosition, -Vector3.right * (30f * ((int)status + 0.5f)), Time.deltaTime * 2f);
     }
     public void TryStopActivate() {
         Validate();

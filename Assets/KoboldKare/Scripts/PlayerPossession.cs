@@ -55,8 +55,17 @@ public class PlayerPossession : MonoBehaviourPun {
     private bool rotating;
     private bool grabbing;
     private bool trackingHip;
+    private bool singleGrabMode = false;
+    [SerializeField] private Transform multigrabSlider;
     private InputSystemUIInputModule inputModule;
     public UnityScriptableSettings.SettingFloat mouseSensitivity;
+    
+    private enum SingleGrabStatus {
+        Off = 0,
+        On,
+    }
+    private SingleGrabStatus status = SingleGrabStatus.Off;
+
     public void OnPause() {
         if (!isActiveAndEnabled) {
             return;
@@ -220,7 +229,8 @@ public class PlayerPossession : MonoBehaviourPun {
 
         if (!pauseInput) {
             if (grabbing && !switchedMode && !pGrabber.HasGrab()) {
-                grabber.TryGrab();
+                f(singleGrabMode) { grabber.TryGrab(1); }
+                else { grabber.TryGrab(); }
             }
         }
 
@@ -274,6 +284,7 @@ public class PlayerPossession : MonoBehaviourPun {
             dickErectionHidable.SetActive(false);
         }
         characterControllerAnimator.SetEyeRot(GetEyeRot());
+        multigrabSlider.transform.localPosition = Vector3.Lerp(multigrabSlider.transform.localPosition, -Vector3.right * (30f * ((int)status + 0.5f)), Time.deltaTime * 2f);
     }
     public void OnJump(InputValue value) { 
         if (!isActiveAndEnabled) return;
@@ -318,8 +329,9 @@ public class PlayerPossession : MonoBehaviourPun {
 
     public void OnGrabToggleInput(InputAction.CallbackContext ctx)
     {
-        int amount = kobold.ToggleMultiGrab();
-        grabber.SetMaxGrabCount(amount);
+        singleGrabMode = !singleGrabMode;
+        if (singleGrabMode) { status = SingleGrabStatus.On; }
+        else { status = SingleGrabStatus.Off; }
     }
 
     public void OnResetHipInput(InputAction.CallbackContext ctx) {
