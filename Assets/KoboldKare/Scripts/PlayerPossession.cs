@@ -100,12 +100,9 @@ public class PlayerPossession : MonoBehaviourPun {
             }
         }
     }
-    void OnGrabToggleChange(bool grabToggleUIStatus)
-    {
-        foreach (var grabToggleUIElement in grabToggleUI)
-        {
-            if (grabToggleUIElement.activeInHierarchy != grabToggleUIStatus)
-            {
+    void OnGrabToggleChange(bool grabToggleUIStatus) {
+        foreach (var grabToggleUIElement in grabToggleUI) {
+            if (grabToggleUIElement.activeInHierarchy != grabToggleUIStatus) {
                 grabToggleUIElement.SetActive(grabToggleUIStatus);
             }
         }
