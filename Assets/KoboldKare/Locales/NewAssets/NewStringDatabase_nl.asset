@@ -684,19 +684,19 @@ MonoBehaviour:
   - m_Id: 83373358009864192
     m_Localized: 'Welkom bij Koboldkare!
 
+      
+
+      Koboldkare is een DRM-vrij
+      spel. Wees alstublieft veilig delen, Koboldkare heeft geen crack nodig om te
+      spelen!
+
+      
+
+      Heel erg bedankt voor het steunen van het spel!
 
 
-      Koboldkare is een DRM-vrij spel.
-      Wees alstublieft veilig delen, Koboldkare heeft geen crack nodig om te spelen!
-
-
-
-      Heel
-      erg bedankt voor het steunen van het spel!
-
-
-      Controleer stoom, jeuk en
-      Patreon voor updates en patchnotities.
+      Controleer
+      stoom, jeuk en Patreon voor updates en patchnotities.
 
 '
     m_Metadata:
@@ -1328,8 +1328,12 @@ MonoBehaviour:
     m_Localized: Dick-shrink
     m_Metadata:
       m_Items: []
-  - m_Id: 260006437095038976
-    m_Localized: "Schakel meerdere wachtstanden in\r"
+  - m_Id: 258142671894794240
+    m_Localized: Modder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 258400516968075264
+    m_Localized: Mod -configuratie
     m_Metadata:
       m_Items: []
   references:

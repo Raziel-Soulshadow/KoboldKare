@@ -1326,8 +1326,12 @@ MonoBehaviour:
     m_Localized: Dick-Shrink
     m_Metadata:
       m_Items: []
-  - m_Id: 260006437095038976
-    m_Localized: "P\u0159epnout v\xEDcen\xE1sobn\xE9 uchopen\xED\r"
+  - m_Id: 258142671894794240
+    m_Localized: Modding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 258400516968075264
+    m_Localized: Konfigurace mod
     m_Metadata:
       m_Items: []
   references:

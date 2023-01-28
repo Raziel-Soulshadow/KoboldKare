@@ -1310,8 +1310,12 @@ MonoBehaviour:
     m_Localized: Bite
     m_Metadata:
       m_Items: []
-  - m_Id: 260006437095038976
-    m_Localized: "Modifier le montant d\xE9tenu\r"
+  - m_Id: 258142671894794240
+    m_Localized: Modding
+    m_Metadata:
+      m_Items: []
+  - m_Id: 258400516968075264
+    m_Localized: Configuration du mod
     m_Metadata:
       m_Items: []
   references:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,12 +21,10 @@ public class PlayerPossession : MonoBehaviourPun {
     public ScrollRect chatScrollView;
     public TMPro.TMP_InputField chatInput;
     public GameObject diePrefab;
-    [SerializeField]
-    private GameEventFloat handVisibilityEvent;
     public InputActionReference back;
-    public PrecisionGrabber pGrabber;
+    private PrecisionGrabber pGrabber;
     public GameObject dickErectionHidable;
-    public Grabber grabber;
+    private Grabber grabber;
     public Camera eyes;
 
     public Vector2 GetEyeRot() {
@@ -42,10 +41,10 @@ public class PlayerPossession : MonoBehaviourPun {
             return cachedKobold;
         }
     }
-    public KoboldCharacterController controller;
-    public CharacterControllerAnimator characterControllerAnimator;
-    public Rigidbody body;
-    public Animator animator;
+    private KoboldCharacterController controller;
+    private CharacterControllerAnimator characterControllerAnimator;
+    private Rigidbody body;
+    private Animator animator;
     public GameEventVector3 playerDieEvent;
     public List<GameObject> localGameObjects = new List<GameObject>();
     public GameObject grabPrompt;
@@ -56,7 +55,6 @@ public class PlayerPossession : MonoBehaviourPun {
     private bool grabbing;
     private bool trackingHip;
     private bool singleGrabMode = false;
-    [SerializeField] private Transform multigrabSlider;
     private InputSystemUIInputModule inputModule;
     public UnityScriptableSettings.SettingFloat mouseSensitivity;
     
@@ -66,6 +64,59 @@ public class PlayerPossession : MonoBehaviourPun {
     }
     private SingleGrabStatus status = SingleGrabStatus.Off;
 
+    
+    [SerializeField]
+    private List<GameObject> activateUI;
+    [SerializeField]
+    private List<GameObject> throwUI;
+    
+    [SerializeField]
+    private List<GameObject> freezeUI;
+    
+    [SerializeField]
+    private List<GameObject> shiftGrabUI;
+
+    [SerializeField]
+    private List<GameObject> grabToggleUI;
+
+    void OnThrowChange(bool newThrowStatus) {
+        foreach (var throwElement in throwUI) {
+            if (throwElement.activeInHierarchy != newThrowStatus) {
+                throwElement.SetActive(newThrowStatus);
+            }
+        }
+    }
+    void OnFreezeChange(bool newFreezeStatus) {
+        foreach (var freezeElement in freezeUI) {
+            if (freezeElement.activeInHierarchy != newFreezeStatus) {
+                freezeElement.SetActive(newFreezeStatus);
+            }
+        }
+    }
+    void OnShiftGrabChange(bool shiftGrabUIStatus) {
+        foreach (var shiftGrabUIElement in shiftGrabUI) {
+            if (shiftGrabUIElement.activeInHierarchy != shiftGrabUIStatus) {
+                shiftGrabUIElement.SetActive(shiftGrabUIStatus);
+            }
+        }
+    }
+    void OnGrabToggleChange(bool grabToggleUIStatus)
+    {
+        foreach (var grabToggleUIElement in grabToggleUI)
+        {
+            if (grabToggleUIElement.activeInHierarchy != grabToggleUIStatus)
+            {
+                grabToggleUIElement.SetActive(grabToggleUIStatus);
+            }
+        }
+    }
+    void OnActivateChange(bool newActivateStatus) {
+        foreach (var activateElement in activateUI) {
+            if (activateElement.activeInHierarchy != newActivateStatus) {
+                activateElement.SetActive(newActivateStatus);
+            }
+        }
+    }
     public void OnPause() {
         if (!isActiveAndEnabled) {
             return;
@@ -91,6 +142,24 @@ public class PlayerPossession : MonoBehaviourPun {
         OnTextSubmit("");
     }
 
+    private void Awake() {
+        controller = GetComponentInParent<KoboldCharacterController>();
+        characterControllerAnimator = GetComponentInParent<CharacterControllerAnimator>();
+        pGrabber = controller.GetComponentInChildren<PrecisionGrabber>();
+        pGrabber.activeUIChanged -= OnShiftGrabChange;
+        pGrabber.freezeUIChanged -= OnFreezeChange;
+        pGrabber.activeUIChanged += OnShiftGrabChange;
+        pGrabber.freezeUIChanged += OnFreezeChange;
+        grabber = controller.GetComponentInChildren<Grabber>();
+        grabber.activateUIChanged -= OnActivateChange;
+        grabber.throwUIChanged -= OnThrowChange;
+        grabber.activateUIChanged += OnActivateChange;
+        grabber.throwUIChanged += OnThrowChange;
+        body = controller.GetComponent<Rigidbody>();
+        animator = controller.GetComponentInChildren<Animator>();
+        inputModule = FindObjectOfType<InputSystemUIInputModule>();
+    }
+
     private void OnTextSubmit(string t) {
         chatInput.text="";
         chatGroup.interactable = false;
@@ -108,7 +177,7 @@ public class PlayerPossession : MonoBehaviourPun {
         back.action.started -= OnBack;
         chatDisplay.ForceVisible(false);
         if (!string.IsNullOrEmpty(t)) {
-            kobold.SendChat(t);
+            kobold.photonView.RPC(nameof(Chatter.RPCSendChat), RpcTarget.All, t);
         }
         inputModule.cancel.action.performed -= OnCancelTextSubmit;
         StopCoroutine(nameof(MaintainFocus));
@@ -117,7 +186,6 @@ public class PlayerPossession : MonoBehaviourPun {
         }
     }
     private void Start() {
-        inputModule = FindObjectOfType<InputSystemUIInputModule>();
         controls = GetComponent<PlayerInput>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -131,7 +199,7 @@ public class PlayerPossession : MonoBehaviourPun {
         if (controls == null) {
             controls = GetComponent<PlayerInput>();
         }
-
+        
         controls.actions["SwitchGrabMode"].performed += OnShiftMode;
         controls.actions["Grab"].performed += OnGrabInput;
         controls.actions["Grab"].canceled += OnGrabCancelled;
@@ -149,6 +217,18 @@ public class PlayerPossession : MonoBehaviourPun {
         controls.actions["HipControl"].canceled += OnCanceledHipInput;
         controls.actions["ResetHip"].performed += OnResetHipInput;
         controls.actions["Chat"].performed += OnChatInput;
+        if (grabber != null) {
+            grabber.activateUIChanged -= OnActivateChange;
+            grabber.throwUIChanged -= OnThrowChange;
+            grabber.activateUIChanged += OnActivateChange;
+            grabber.throwUIChanged += OnThrowChange;
+        }
+        if (pGrabber != null) {
+            pGrabber.activeUIChanged -= OnShiftGrabChange;
+            pGrabber.freezeUIChanged -= OnFreezeChange;
+            pGrabber.activeUIChanged += OnShiftGrabChange;
+            pGrabber.freezeUIChanged += OnFreezeChange;
+        }
     }
 
     private void OnDisable() {
@@ -173,6 +253,16 @@ public class PlayerPossession : MonoBehaviourPun {
         controls.actions["HipControl"].canceled -= OnCanceledHipInput;
         controls.actions["ResetHip"].performed -= OnResetHipInput;
         controls.actions["Chat"].performed -= OnChatInput;
+        
+        if (grabber != null) {
+            grabber.activateUIChanged -= OnActivateChange;
+            grabber.throwUIChanged -= OnThrowChange;
+        }
+
+        if (pGrabber != null) {
+            pGrabber.activeUIChanged -= OnShiftGrabChange;
+            pGrabber.freezeUIChanged -= OnFreezeChange;
+        }
     }
 
     private void OnDestroy() {
@@ -229,7 +319,7 @@ public class PlayerPossession : MonoBehaviourPun {
 
         if (!pauseInput) {
             if (grabbing && !switchedMode && !pGrabber.HasGrab()) {
-                f(singleGrabMode) { grabber.TryGrab(1); }
+                if(singleGrabMode) { grabber.TryGrab(1); }
                 else { grabber.TryGrab(); }
             }
         }
@@ -284,9 +374,9 @@ public class PlayerPossession : MonoBehaviourPun {
             dickErectionHidable.SetActive(false);
         }
         characterControllerAnimator.SetEyeRot(GetEyeRot());
-        multigrabSlider.transform.localPosition = Vector3.Lerp(multigrabSlider.transform.localPosition, -Vector3.right * (30f * ((int)status + 0.5f)), Time.deltaTime * 2f);
+        grabToggleUI(1).transform.localPosition = Vector3.Lerp(multigrabSlider.transform.localPosition, -Vector3.right * (30f * ((int)status + 0.5f)), Time.deltaTime * 2f);
     }
-    public void OnJump(InputValue value) { 
+    public void OnJump(InputValue value) {
         if (!isActiveAndEnabled) return;
         controller.inputJump = value.Get<float>() > 0f;
         if (!photonView.IsMine) {
@@ -296,8 +386,8 @@ public class PlayerPossession : MonoBehaviourPun {
 
     public void OnShiftMode(InputAction.CallbackContext ctx) {
         bool shift = ctx.ReadValue<float>() > 0f;
-        handVisibilityEvent.Raise(ctx.ReadValue<float>());
         switchedMode = shift;
+        PrecisionGrabber.SetPinVisibility(shift);
         pGrabber.SetPreviewState(shift);
         if (!shift) {
             StartCoroutine(PauseInputForSeconds(0.5f));
@@ -327,8 +417,7 @@ public class PlayerPossession : MonoBehaviourPun {
         }
     }
 
-    public void OnGrabToggleInput(InputAction.CallbackContext ctx)
-    {
+    public void OnGrabToggleInput(InputAction.CallbackContext ctx) {
         singleGrabMode = !singleGrabMode;
         if (singleGrabMode) { status = SingleGrabStatus.On; }
         else { status = SingleGrabStatus.Off; }
@@ -425,7 +514,7 @@ public class PlayerPossession : MonoBehaviourPun {
             chatGroup.interactable = true;
             chatGroup.alpha = 1f;
             if (inputRagdolled) {
-                kobold.ragdoller.PopRagdoll();
+                kobold.GetRagdoller().PopRagdoll();
             }
 
             back.action.started += OnBack;
@@ -508,7 +597,7 @@ public class PlayerPossession : MonoBehaviourPun {
     // This fixes a bug where OnRagdoll isn't called when the application isn't in focus.
     void OnApplicationFocus(bool hasFocus) {
         if (hasFocus && inputRagdolled) {
-            kobold.ragdoller.PopRagdoll();
+            kobold.GetRagdoller().PopRagdoll();
             inputRagdolled = false;
         }
     }
